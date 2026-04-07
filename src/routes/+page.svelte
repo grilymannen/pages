@@ -3,15 +3,15 @@
     {
       post: 'https://www.tumblr.com/slugfishh/734075615509086208/sait',
       src: 'imgs/sait.jpg',
-      artist: 'slugfishh'
+      artist: '@slugfishh'
     },
     {
-      post: null,
-      src: null,
-      artist: null
+      post: 'https://www.tumblr.com/rain-mantis/798154938937212928/i-finally-tried-out-wigglypaint-its-very-fun-but',
+      src: 'imgs/saint_wigglypaint.webp',
+      artist: '@rain-mantis',
     }
   ]
-  let currentWidget = widgetData[0];
+  let currentWidget = widgetData[1];
 </script>
 <main class='w-screen h-screen grid grid-rows-[50px_1fr_50px] *:text-neutral-200 '>
   <div></div>
