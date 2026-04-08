@@ -1,5 +1,5 @@
 <script>
-  // import { toRadians } from "$lib/utils";
+  import { onMount } from 'svelte'
   const widgetData = [
     {
       post: 'https://www.tumblr.com/slugfishh/734075615509086208/sait',
@@ -12,19 +12,37 @@
       artist: '@rain-mantis',
     }
   ]
-  let breathing = $state(false);
   let interval;
   let increment = 0;
+  let rotation = $state({x: 0, y: 0});
   let yOffset = $state(0);
   let currentWidget = widgetData[1];
 
+  
+  onMount(() => {
+    startBreathe();
+    
+    const widget = document.getElementById('widget');
+    widget.addEventListener('mousemove', handleMouseMove);
+    widget.addEventListener('mouseleave', handleMouseLeave);
+  });
+  function handleMouseLeave() {
+    rotation.x = 0;
+    rotation.y = 0;
+  }
+  function handleMouseMove(event) {
+    const maxDegrees = 25; // This is what looks good
+    const widget = event.originalTarget;
+    const size = {height: widget.clientHeight, width: widget.clientWidth};
+    const ratioX = event.layerX / size.width;
+    const ratioY = event.layerY / size.height;
+    rotation.x = Math.sin((ratioX - 0.5)  ) * maxDegrees;
+    rotation.y = Math.sin((ratioY - 0.5)) * maxDegrees;
+  }
   function startBreathe() {
-    console.log('staret')
-    breathing = true;
     interval = setInterval(animateBreathing, 1);
   }
   function endBreathe() {
-    breathing = false;
     clearInterval(interval);
   }
   function animateBreathing() {
@@ -36,22 +54,30 @@
   <div></div>
   <div class='h-full flex items-center justify-center gap-4'>
     <h1 class='text-4xl font-bold'>Hello, I am grily!</h1>
-    <div class="w-80">
-      <img src={currentWidget.src} alt='main widget' style='top: {yOffset}px;' class='relative shadow-2xl'>
-      <a 
-        href={currentWidget.post} 
-        class='text-blue-300 underline' 
-        target='_blank' 
-        rel='external'>stolen with respect from {currentWidget.artist}</a>
+    <div class='w-80 perspective-distant'>
+      <div 
+        class='relative hover:scale-110 hover:*:opacity-100'
+        id='widget'
+        style=
+          'top: {yOffset}px; 
+          transition: all 0.1s; 
+          transform: rotateX({rotation.y}deg) rotateY({rotation.x}deg);'>
+        
+        <img 
+          src={currentWidget.src} 
+          alt='main widget'>
+          <a 
+            href={currentWidget.post} 
+            class='text-blue-300 underline absolute top-1 text-center w-full bg-black/30 opacity-0 transition-opacity' 
+            target='_blank' 
+            rel='external'>↳ stolen with respect from {currentWidget.artist} </a>
+        </div>
+      
     </div>
   </div>
   <div></div>
 </main>
 
-<aside class='fixed bottom-2 right-2 flex gap-4 *:bg-zinc-800 *:px-4 *:py-2 *:text-neutral-200 *:rounded-2xl *:shadow-2xl'>
-  <button onclick={startBreathe} disabled={breathing} class:bg-amber-500={breathing}>Start</button>
-  <button onclick={endBreathe} disabled={!breathing}>End</button>
-</aside>
 
 <style>
 
