@@ -12,7 +12,7 @@
       artist: '@rain-mantis',
     }
   ]
-  let interval;
+
   let increment = 0;
   let rotation = $state({x: 0, y: 0});
   let yOffset = $state(0);
@@ -40,11 +40,13 @@
     rotation.y = Math.sin((ratioY - 0.5)) * maxDegrees;
   }
   function startBreathe() {
-    interval = setInterval(animateBreathing, 1);
+    setInterval(animateBreathing, 1);
   }
+  /*
   function endBreathe() {
     clearInterval(interval);
   }
+  */
   function animateBreathing() {
     increment++;
     yOffset = Math.sin(increment * 0.02) * 5;
