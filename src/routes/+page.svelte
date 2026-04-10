@@ -4,12 +4,12 @@
     {
       post: 'https://www.tumblr.com/slugfishh/734075615509086208/sait',
       src: 'imgs/sait.jpg',
-      artist: '@slugfishh'
+      artist: 'slugfishh'
     },
     {
       post: 'https://www.tumblr.com/rain-mantis/798154938937212928/i-finally-tried-out-wigglypaint-its-very-fun-but',
       src: 'imgs/saint_wigglypaint.webp',
-      artist: '@rain-mantis',
+      artist: 'rain-mantis',
     }
   ]
 
@@ -54,7 +54,7 @@
 </script>
 <main class='w-screen h-screen grid grid-rows-[50px_1fr_50px] *:text-neutral-200 '>
   <div></div>
-  <div class='h-full flex items-center justify-center gap-4'>
+  <div class='h-full flex items-center justify-center gap-16'>
     <h1 class='text-4xl font-bold'>Hello, I am grily!</h1>
     <div class='w-80 perspective-distant'>
       <div 
@@ -72,7 +72,7 @@
             href={currentWidget.post} 
             class='text-blue-300 underline absolute top-1 text-center w-full bg-black/30 opacity-0 transition-opacity' 
             target='_blank' 
-            rel='external'>↳ stolen with respect from {currentWidget.artist} </a>
+            rel='external'>↳ stolen with respect from @{currentWidget.artist} </a>
         </div>
       
     </div>
