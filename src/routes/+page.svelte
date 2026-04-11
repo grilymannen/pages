@@ -1,4 +1,5 @@
 <script>
+
 	import { onMount } from 'svelte';
 	// For src, "imgs/" is always added
 	const widgetData = [
@@ -18,25 +19,91 @@
 			artist: 'Ongomato'
 		}
 	];
-
+	let screenWidth,screenHeight,screenWidthCenter; // Re-add "screenHeightCenter" if needed lmao
+	const glyphs = [];
 	let increment = 0;
 	let rotation = $state({ x: 0, y: 0 });
 	let yOffset = $state(0);
 	let currentWidget = widgetData[2];
+	const colorZinc700 = 'oklch(37% 0.013 285.805)';
+	// const colorZinc800 = 'oklch(27.4% 0.006 286.033)';
+	const colorNeutral200 = 'oklch(92.2% 0 0)'
+
 
 	onMount(() => {
 		startBreathe();
-
+		screenUpdate();
+		window.addEventListener('resize', screenUpdate);
+		draw()
+		// Event listeners for the widget
 		const widget = document.getElementById('widget');
 		widget.addEventListener('mousemove', handleMouseMove);
 		widget.addEventListener('mouseleave', handleMouseLeave);
 	});
+
+	function draw() {
+		const canvas = document.getElementById('c');
+		const ctx = canvas.getContext('2d');
+		// Bg
+		ctx.fillStyle = colorZinc700;
+		ctx.fillRect(0, 0, screenWidth, screenHeight);
+
+		const size = 2;
+		const speed = 1;
+
+		function generateCube(type) {
+			switch (type) {
+				case 'rows': {
+					const maxColumns = Math.floor(screenWidth / size);
+					const randomColumn = Math.floor(Math.random() * maxColumns);
+					const xPos = randomColumn * size;
+					return {x: xPos, y: -size, w: size, h: size};
+				}
+				case 'random':
+				default:
+					return {x: screenWidth * 2 * Math.random(), y: -size, w: size, h: size};
+			}
+		}
+		
+
+		glyphs.push(generateCube());
+		
+
+
+		
+		ctx.fillStyle = colorNeutral200;
+		for (let i = 0; i <= glyphs.length - 1; i++) {
+			
+			const glyph = glyphs[i];
+
+			if (glyph.y > screenHeight) {
+				glyphs.splice(i,1);
+			}
+			ctx.fillRect(glyph.x, glyph.y, glyph.w, glyph.h);
+			glyph.y += speed;
+			glyph.y *= 1.005;
+			glyph.w, glyph.h *= 1.001
+			
+			glyph.x += (screenWidthCenter - glyph.x) * 0.2 * 0.002;
+		}
+
+		window.requestAnimationFrame(draw);
+	}
+	function screenUpdate() {
+		const canvas = document.getElementById('c');
+		screenHeight = window.innerHeight;
+		screenWidth = window.innerWidth;
+		//screenHeightCenter = Math.floor(screenHeight / 2); 
+		screenWidthCenter = Math.floor(screenWidth / 2);
+		canvas.setAttribute('height', screenHeight);
+		canvas.setAttribute('width', screenWidth);
+	}
 	function handleMouseLeave() {
 		rotation.x = 0;
 		rotation.y = 0;
 	}
 	function handleMouseMove(event) {
-		const maxDegrees = 25; // This is what looks good
+		const maxDegrees = 25; // This is what looks good, I guess 
 		const widget = event.originalTarget;
 		const size = { height: widget.clientHeight, width: widget.clientWidth };
 		const ratioX = event.layerX / size.width;
@@ -57,7 +124,8 @@
 		yOffset = Math.sin(increment * 0.02) * 5;
 	}
 </script>
-
+<title>grily</title>
+<canvas id="c" class="fixed -z-10"></canvas>
 <main class="grid h-screen w-screen grid-rows-[50px_1fr_50px] *:text-neutral-200">
 	<div></div>
 	<div class="flex h-full items-center justify-center gap-16">

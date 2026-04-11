@@ -9,7 +9,5 @@
 {@render children()}
 
 <style>
-	:global(body) {
-		background-color: var(--color-zinc-700);
-	}
+
 </style>
