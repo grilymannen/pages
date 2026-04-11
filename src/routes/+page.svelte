@@ -67,6 +67,7 @@
 		
 
 		glyphs.push(generateCube());
+		glyphs.push(generateCube());
 		
 
 
